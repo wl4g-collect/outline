@@ -117,7 +117,7 @@ router.post(
     });
     authorize(user, "delete", fileOperation);
 
-    await fileOperation.destroy(ctx.context);
+    await fileOperation.destroyWithCtx(ctx);
 
     ctx.body = {
       success: true,

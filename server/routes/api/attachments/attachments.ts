@@ -63,20 +63,17 @@ router.post(
       userId: user.id,
     });
 
-    const attachment = await Attachment.create(
-      {
-        id: modelId,
-        key,
-        acl,
-        size,
-        expiresAt: AttachmentHelper.presetToExpiry(preset),
-        contentType,
-        documentId,
-        teamId: user.teamId,
-        userId: user.id,
-      },
-      ctx.context
-    );
+    const attachment = await Attachment.createWithCtx(ctx, {
+      id: modelId,
+      key,
+      acl,
+      size,
+      expiresAt: AttachmentHelper.presetToExpiry(preset),
+      contentType,
+      documentId,
+      teamId: user.teamId,
+      userId: user.id,
+    });
 
     const presignedPost = await FileStorage.getPresignedPost(
       key,
@@ -131,7 +128,7 @@ router.post(
     }
 
     authorize(user, "delete", attachment);
-    await attachment.destroy(ctx.context);
+    await attachment.destroyWithCtx(ctx);
 
     ctx.body = {
       success: true,
